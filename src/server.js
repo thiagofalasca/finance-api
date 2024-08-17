@@ -5,10 +5,10 @@ app.use(express.json());
 require('dotenv').config();
 
 // Rotas da aplicação
-app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/users', require('./routes/userRoutes.js'));
 
 // Conectando ao banco de dados e iniciando o servidor
-const sequelize = require('./config/database');
+const sequelize = require('./config/database.js');
 sequelize
     .sync()
     .then(() => {
