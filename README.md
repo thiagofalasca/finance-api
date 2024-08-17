@@ -26,25 +26,6 @@ Finance API é uma API back-end desenvolvida em Node.js usando Express, que visa
 - **dotenv**: Gerenciamento de variáveis de ambiente.
 - **express-validator**: Validação de dados em Express.
 
-## Estrutura do Projeto
-finance-api/
-│
-├── src/
-│ ├── config/ # Configurações da aplicação (ex: conexão com banco de dados)
-│ ├── controllers/ # Controladores (lógica de roteamento)
-│ ├── models/ # Modelos de dados (representação das entidades)
-│ ├── services/ # Serviços (lógica de negócios)
-│ ├── middlewares/ # Middlewares (ex: autenticação, validação)
-│ ├── routes/ # Rotas da aplicação
-│ ├── utils/ # Funções utilitárias
-│ └── server.js # Arquivo principal para iniciar o servidor
-│
-├── .env # Variáveis de ambiente
-├── .gitignore # Arquivos e pastas a serem ignorados pelo Git
-├── package.json # Dependências e scripts do projeto
-└── README.md # Documentação do projeto
-
-
 ## Pré-requisitos
 
 Antes de começar, certifique-se de ter o Node.js e o PostgreSQL instalados em sua máquina.
@@ -69,7 +50,7 @@ Antes de começar, certifique-se de ter o Node.js e o PostgreSQL instalados em s
 
 3. **Configure as variáveis deambiente:**
 
-Crie um arquivo .env na raiz do projeto com as seguintes variáveis:
+    Crie um arquivo .env na raiz do projeto com as seguintes variáveis:
 
     ```
     DB_DIALECT=postgres
@@ -84,7 +65,7 @@ Crie um arquivo .env na raiz do projeto com as seguintes variáveis:
 
 4. **Configure o banco de dados:**
 
-Certifique-se de que o PostgreSQL esteja rodando e crie o banco de dados:
+    Certifique-se de que o PostgreSQL esteja rodando e crie o banco de dados:
 
     ```
     CREATE DATABASE my_finance;
@@ -96,7 +77,7 @@ Certifique-se de que o PostgreSQL esteja rodando e crie o banco de dados:
     npm run dev
     ```
 
-O servidor estará disponível em http://localhost:3000.
+    O servidor estará disponível em http://localhost:3000.
 
 ## Uso
 
