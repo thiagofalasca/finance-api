@@ -2,10 +2,11 @@
   "name": "finance-api",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "start": "nodemon src/server.js",
+    "test": "vitest",
     "lint": "eslint 'src/**/*.js'",
     "format": "prettier --write 'src/**/*.js'",
     "swagger-autogen": "node swagger.js"
@@ -29,6 +30,8 @@
     "eslint": "^9.9.0",
     "globals": "^15.9.0",
     "nodemon": "^3.1.4",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "supertest": "^7.0.0",
+    "vitest": "^2.0.5"
   }
 }
