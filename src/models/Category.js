@@ -1,6 +1,8 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database.js');
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/database.js';
+import User from './User.js';
 
+// Define o modelo 'Category' com Sequelize
 const Category = sequelize.define(
     'Category',
     {
@@ -19,9 +21,8 @@ const Category = sequelize.define(
     },
 );
 
-Category.hasMany(Transaction, {
-    foreignKey: 'category_id',
-    onDelete: 'SET NULL',
-});
+// Define o relacionamento entre Category e User
+Category.belongsTo(User, { foreignKey: 'user_id' });
+User.hasMany(Category, { foreignKey: 'user_id' });
 
-module.exports = Category;
+export default Category;

@@ -1,6 +1,7 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database.js');
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/database.js';
 
+// Define o modelo 'User' com Sequelize
 const User = sequelize.define(
     'User',
     {
@@ -32,9 +33,4 @@ const User = sequelize.define(
     },
 );
 
-User.hasMany(Transaction, {
-    foreignKey: 'user_id',
-    onDelete: 'CASCADE',
-});
-
-module.exports = User;
+export default User;

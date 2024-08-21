@@ -1,8 +1,9 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database.js');
-const User = require('./User');
-const Category = require('./Category');
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/database.js';
+import Category from './Category.js';
+import User from './User.js';
 
+// Define o modelo 'Transaction' com Sequelize
 const Transaction = sequelize.define(
     'Transaction',
     {
@@ -33,14 +34,12 @@ const Transaction = sequelize.define(
     },
 );
 
-Transaction.belongsTo(User, {
-    foreignKey: 'user_id',
-    onDelete: 'CASCADE',
-});
+// Define o relacionamento entre Transaction e User
+Transaction.belongsTo(User, { foreignKey: 'user_id' });
+User.hasMany(Transaction, { foreignKey: 'user_id' });
 
-Transaction.belongsTo(Category, {
-    foreignKey: 'category_id',
-    onDelete: 'SET NULL',
-});
+// Define o relacionamento entre Transaction e Category
+Transaction.belongsTo(Category, { foreignKey: 'category_id' });
+Category.hasMany(Transaction, { foreignKey: 'category_id' });
 
-module.exports = Transaction;
+export default Transaction;
