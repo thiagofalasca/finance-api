@@ -1,48 +1,92 @@
+import express from 'express';
 import User from '../models/User.js';
 import Category from '../models/Category.js';
 import Transaction from '../models/Transaction.js';
+import bcrypt from 'bcryptjs';
+import sequelize from '../config/database.js';
 
-// Função para criar o usuário administrador e dados de teste
-const install = async (req, res, next) => {
+const router = express.Router();
+
+router.get('/install', async (req, res) => {
     try {
-        // Cria o usuário administrador
-        await User.create({
+        await sequelize.sync({ force: true })
+        // Cria um usuário administrador
+        const adminUser = await User.create({
             name: 'Admin User',
-            email: 'admin@example.com',
-            password: 'adminpassword', // Aqui você pode querer criptografar a senha
+            email: 'admin@email.com',
+            password: await bcrypt.hash('admin123', 10),
             is_admin: true,
         });
-        // Cria 5 usuários
-        for (let i = 1; i <= 5; i++) {
-            await User.create({
-                name: `User ${i}`,
-                email: `user${i}@example.com`,
-                password: `password${i}`, // Aqui você pode querer criptografar a senha
-                is_admin: false,
-            });
-        }
-        // Cria 5 categorias
-        for (let i = 1; i <= 5; i++) {
-            await Category.create({
-                name: `Category ${i}`,
-                user_id: 1, // Associa todas as categorias ao usuário administrador (ou ajuste conforme necessário)
-            });
-        }
-        // Cria 5 transações
-        for (let i = 1; i <= 5; i++) {
-            await Transaction.create({
-                type: i % 2 === 0 ? 'expense' : 'income', // Alterna entre 'expense' e 'income'
-                amount: 100 * i,
-                date: new Date(),
-                description: `Transaction ${i}`,
-                category_id: i, // Associa transações às categorias criadas
-                user_id: 1, // Associa todas as transações ao usuário administrador (ou ajuste conforme necessário)
-            });
-        }
-        res.status(200).json({ message: 'Dados de teste criados com sucesso!' });
-    } catch (error) {
-        next(error);
-    }
-};
 
-export default install;
+        // Cria usuários comuns
+        const users = await Promise.all([
+            User.create({
+                name: 'User 1',
+                email: 'user1@email.com',
+                password: await bcrypt.hash('user123', 10),
+            }),
+            User.create({
+                name: 'User 2',
+                email: 'user2@email.com',
+                password: await bcrypt.hash('user123', 10),
+            }),
+            User.create({
+                name: 'User 3',
+                email: 'user3@email.com',
+                password: await bcrypt.hash('user123', 10),
+            }),
+            User.create({
+                name: 'User 4',
+                email: 'user4@email.com',
+                password: await bcrypt.hash('user123', 10),
+            }),
+            User.create({
+                name: 'User 5',
+                email: 'user5@email.com',
+                password: await bcrypt.hash('user123', 10),
+            }),
+        ]);
+
+        // Cria 3 categorias para cada usuário
+        for (const user of [...users, adminUser]) {
+            const categories = await Promise.all([
+                Category.create({ name: 'Category A', user_id: user.id }),
+                Category.create({ name: 'Category B', user_id: user.id }),
+                Category.create({ name: 'Category C', user_id: user.id }),
+            ]);
+
+            // Cria 3 transações para cada usuário, associadas às suas categorias
+            await Promise.all([
+                Transaction.create({
+                    type: 'income',
+                    amount: 100.00,
+                    date: new Date(),
+                    description: 'Transaction 1',
+                    category_id: categories[0].id,
+                    user_id: user.id,
+                }),
+                Transaction.create({
+                    type: 'expense',
+                    amount: 50.00,
+                    date: new Date(),
+                    description: 'Transaction 2',
+                    category_id: categories[1].id,
+                    user_id: user.id,
+                }),
+                Transaction.create({
+                    type: 'income',
+                    amount: 75.00,
+                    date: new Date(),
+                    description: 'Transaction 3',
+                    category_id: categories[2].id,
+                    user_id: user.id,
+                }),
+            ]);
+        }
+        res.status(200).json({ message: 'Banco de dados inicializado com sucesso!' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao inicializar o banco de dados.', error: error.message });
+    }
+});
+
+export default router;
