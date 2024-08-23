@@ -5,10 +5,8 @@ const verifyToken = (req, res, next) => {
     // Extrai o token do cabeçalho Authorization
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-
     // Verifica se o token foi fornecido
     if (!token) throw new AuthenticationError('Token não fornecido, acesso negado.');
-
     // Verifica e decodifica o token usando a chave secreta do .env
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) throw new ForbiddenError('Token inválido, acesso negado.');

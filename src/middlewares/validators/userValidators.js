@@ -1,139 +1,101 @@
-import { body, param, query, validationResult } from 'express-validator';
+import { body, query, param } from 'express-validator';
+import { idValidationRules, listValidationRules, nameValidationRules } from './genericValidators.js';
 
-// Middleware para validar os dados
-const validateData = (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        // Retorna erros de validação
-        return res.status(400).json({ errors: errors.array() });
-    }
-    next();
+// Regras de validação para campo email
+const emailValidationRules = (
+    location = 'body',
+    isOptional = false,
+    checkValidEmail = true,
+    maxLength = 255,
+) => {
+    const validatorMap = {
+        body: body('email'),
+        param: param('email'),
+        query: query('email'),
+    };
+    const emailValidator = validatorMap[location];
+    if (!emailValidator) throw new Error(`Tipo de validação "${location}" não suportado.`);
+    if (isOptional) emailValidator.optional();
+    return emailValidator
+        .notEmpty()
+        .withMessage('O campo email não pode estar vazio.')
+        .bail()
+        .if(() => checkValidEmail)
+        .isEmail()
+        .withMessage('O campo email deve ser um endereço de email válido.')
+        .bail()
+        .isLength({ max: maxLength })
+        .withMessage(`O campo email deve ter no máximo ${maxLength} caracteres.`)
+        .trim()
+        .escape()
+        .normalizeEmail();
+};
+
+// Regras de validação para campo password
+const passwordValidationRules = (
+    location = 'body',
+    isOptional = false,
+    checkValidPassword = true,
+    maxLength = 255,
+) => {
+    const validatorMap = {
+        body: body('password'),
+        param: param('password'),
+        query: query('password'),
+    };
+    const passwordValidator = validatorMap[location];
+    if (!passwordValidator) throw new Error(`Tipo de validação "${location}" não suportado.`);
+    if (isOptional) passwordValidator.optional();
+    return passwordValidator
+        .notEmpty()
+        .withMessage('O campo password não pode estar vazio.')
+        .bail()
+        .if(() => checkValidPassword)
+        .matches(/^\S*$/)
+        .withMessage('O campo password não pode conter espaços em branco.')
+        .bail()
+        .isLength({ min: 8 })
+        .withMessage('O campo password deve ter no mínimo 8 caracteres.')
+        .bail()
+        .isLength({ max: maxLength })
+        .withMessage(`O campo password deve ter no máximo ${maxLength} caracteres.`)
+        .trim()
+        .escape();
 };
 
 // Regras de validação para listagem de usuários
-const listValidationRules = () => {
+const listUserValidationRules = () => {
     return [
-        // Valida o campo 'page'
-        query('page')
-            .optional()
-            .isInt({ min: 1 })
-            .withMessage('O campo page deve ser um número inteiro positivo.'),
-
-        // Valida o campo 'limit'
-        query('limit')
-            .optional()
-            .isInt()
-            .withMessage('O campo limit deve ser um número inteiro.')
-            .bail()
-            .isIn([5, 10, 30])
-            .withMessage('O campo limit deve ser 5, 10 ou 30.'),
+        listValidationRules(),
+        idValidationRules('query', true),
+        nameValidationRules('query', true),
+        emailValidationRules('query', true, false),
     ];
 };
 
 // Regras de validação para o registro de usuários
 const userValidationRules = () => {
     return [
-        // Valida o campo 'name'
-        body('name').notEmpty().withMessage('O campo name não pode estar vazio.').trim().escape(),
-
-        // Valida o campo 'email'
-        body('email')
-            .notEmpty()
-            .withMessage('O campo email não pode estar vazio.')
-            .bail()
-            .isEmail()
-            .withMessage('O campo email deve ser um endereço de email válido.')
-            .normalizeEmail(),
-
-        // Valida o campo 'password'
-        body('password')
-            .notEmpty()
-            .withMessage('O campo password não pode estar vazio.')
-            .bail()
-            .matches(/^\S*$/)
-            .withMessage('O campo password não pode conter espaços em branco.')
-            .bail()
-            .isLength({ min: 8 })
-            .withMessage('O campo password deve ter no mínimo 8 caracteres.')
-            .trim()
-            .escape(),
-    ];
+        nameValidationRules(),
+        emailValidationRules(),
+        passwordValidationRules()];
 };
 
-// Regras de validação para o registro de usuários
+// Regras de validação para a atualização de usuários
 const updateUserValidationRules = () => {
     return [
-        // Valida o campo 'id'
-        param('id')
-            .optional()
-            .isInt({ min: 1 })
-            .withMessage('O campo id deve ser um número inteiro positivo.'),
-
-        // Valida o campo 'name'
-        body('name')
-            .optional()
-            .notEmpty()
-            .withMessage('O campo name não pode estar vazio.')
-            .trim()
-            .escape(),
-
-        // Valida o campo 'email'
-        body('email')
-            .optional()
-            .notEmpty()
-            .withMessage('O campo email não pode estar vazio.')
-            .bail()
-            .isEmail()
-            .withMessage('O campo email deve ser um endereço de email válido.')
-            .normalizeEmail(),
-
-        // Valida o campo 'password'
-        body('password')
-            .optional()
-            .notEmpty()
-            .withMessage('O campo password não pode estar vazio.')
-            .bail()
-            .matches(/^\S*$/)
-            .withMessage('O campo password não pode conter espaços em branco.')
-            .bail()
-            .isLength({ min: 8 })
-            .withMessage('O campo password deve ter no mínimo 8 caracteres.')
-            .trim()
-            .escape(),
-    ];
-};
-
-// Regras de validação para deletar usuários
-const userIdValidationRules = () => {
-    return [
-        // Valida o campo 'id'
-        param('id')
-            .optional()
-            .isInt({ min: 1 })
-            .withMessage('O campo id deve ser um número inteiro positivo.'),
+        idValidationRules('param', true),
+        nameValidationRules('body', true),
+        emailValidationRules('body', true),
+        passwordValidationRules('body', true),
     ];
 };
 
 // Regras de validação para o login de usuários
 const loginValidationRules = () => {
     return [
-        // Valida o campo 'email'
-        body('email').notEmpty().withMessage('O campo email não pode estar vazio.').trim().escape(),
-
-        // Valida o campo 'password'
-        body('password')
-            .notEmpty()
-            .withMessage('O campo password não pode estar vazio.')
-            .trim()
-            .escape(),
-    ];
+        emailValidationRules(),
+        passwordValidationRules('body', false, false)];
 };
 
-export {
-    validateData,
-    listValidationRules,
-    userValidationRules,
-    updateUserValidationRules,
-    userIdValidationRules,
-    loginValidationRules,
-};
+export { listUserValidationRules, userValidationRules, updateUserValidationRules, loginValidationRules };

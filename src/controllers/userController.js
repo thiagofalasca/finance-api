@@ -1,70 +1,90 @@
 import express from 'express';
-import { findUserById, listUsers, register, update, deleteUser, login } from '../services/userService.js';
 import { verifyToken, verifyAdmin } from '../middlewares/auth.js';
-import {
-    userValidationRules,
-    loginValidationRules,
-    validateData,
-    listValidationRules,
-    updateUserValidationRules,
-    userIdValidationRules,
-} from '../middlewares/validators/userValidators.js';
-
-// Função para verificar se é admin
-const getUserId = (req, is_admin) => (is_admin ? req.params.id : req.userId);
-
-// Função para manipular respostas
-const handleRequest = async (res, next, status, service) => {
-    try {
-        // Executa a função passada e retorna a resposta
-        const result = await service();
-        res.status(status).json(result);
-    } catch (error) {
-        // Passa o erro para o middleware de erros
-        next(error);
-    }
-};
+import requestHandler from '../middlewares/requestHandler.js';
+import { findUserById, listUsers, register, update, deleteUser, login } from '../services/userService.js';
+import { idValidationRules, validateData } from '../middlewares/validators/genericValidators.js';
+import { listUserValidationRules, userValidationRules, loginValidationRules, updateUserValidationRules } from '../middlewares/validators/userValidators.js';
 
 const router = express.Router();
 
-// Rotas dos administradores
-// Lista todos os usuários (somente administradores)
-router.get('/', verifyAdmin, listValidationRules(), validateData, (req, res, next) =>
-    handleRequest(res, next, 200, () => listUsers(req.query)),
-);
-// Registra um novo administrador (somente administradores)
-router.post('/admins/register', verifyAdmin, userValidationRules(), validateData, (req, res, next) =>
-    handleRequest(res, next, 201, () => register(req.body, true)),
-);
-// Recupera um usuário por ID (somente administradores)
-router.get('/admins/:id', verifyAdmin, userIdValidationRules(), validateData, (req, res, next) =>
-    handleRequest(res, next, 200, () => findUserById(getUserId(req, true))),
-);
-// Atualiza um usuário por ID (somente administradores)
-router.put('/admins/:id', verifyAdmin, updateUserValidationRules(), validateData, (req, res, next) =>
-    handleRequest(res, next, 200, () => update(getUserId(req, true), req.body)),
-);
-// Deleta um usuário por ID (somente administradores)
-router.delete('/admins/:id', verifyAdmin, userIdValidationRules(), validateData, (req, res, next) =>
-    handleRequest(res, next, 200, () => deleteUser(req.params.id)),
+// Rotas para administradores
+
+// Listar Usuários
+// Rota: GET /users
+// Descrição: Retorna uma lista de todos os usuáris, podendo filtrar por nome, email e id.
+router.get('/users',
+    verifyAdmin,
+    listUserValidationRules(),
+    validateData,
+    requestHandler(200, listUsers),
 );
 
-// Rotas dos usuários
-// Registra um novo usuário
-router.post('/register', userValidationRules(), validateData, (req, res, next) =>
-    handleRequest(res, next, 201, () => register(req.body)),
+// Registrar Administrador
+// Rota: POST /admins/users/register
+// Descrição: Registra um novo usuário
+router.post('/admins/users/register',
+    verifyAdmin,
+    userValidationRules(),
+    validateData,
+    requestHandler(201, (req) => register(req, true)),
 );
-// Recupera informações do usuário autenticado
-router.get('/me', verifyToken, (req, res, next) =>
-    handleRequest(res, next, 200, () => findUserById(req.userId)),
+
+// Atualizar Usuário
+// Rota: PUT /admins/users/:id
+// Descrição: Atualiza os dados de um usuário específico pelo id.
+router.put('/admins/users/:id',
+    verifyAdmin,
+    updateUserValidationRules(),
+    validateData,
+    requestHandler(200, (req) => update(req, true)),
 );
-// Atualiza informações do usuário autenticado
-router.put('/me', verifyToken, updateUserValidationRules(), validateData, (req, res, next) =>
-    handleRequest(res, next, 200, () => update(req.userId, req.body)),
+
+// Deletar Usuário
+// Rota: DELETE /admins/users/:id
+// Descrição: Deleta um usuário específico pelo id.
+router.delete('/admins/users/:id',
+    verifyAdmin,
+    idValidationRules('param'),
+    validateData,
+    requestHandler(200, (req) => deleteUser(req)),
 );
-// Faz o login do usuário e retorna um token JWT
-router.post('/login', loginValidationRules(), validateData, (req, res, next) =>
-    handleRequest(res, next, 200, () => login(req.body)),
+
+// Rotas para usuários comuns
+
+// Registrar Usuário
+// Rota: POST /users/register
+// Descrição: Registra um novo usuário
+router.post('/users/register',
+    userValidationRules(),
+    validateData,
+    requestHandler(201, register),
+);
+
+// Ver Usuário
+// Rota: POST /users/me
+// Descrição: Mostra os dados do usuário autenticado
+router.get('/users/me',
+    verifyToken,
+    requestHandler(200, (req) => findUserById(req.userId)),
+);
+
+// Atualizar Usuário
+// Rota: PUT /users/me
+// Descrição: Atualiza os dados do usuário autenticado.
+router.put('/users/me',
+    verifyToken,
+    updateUserValidationRules(),
+    validateData,
+    requestHandler(200, update),
+);
+
+// Login
+// Rota: DELETE /users/login
+// Descrição: Autentica um usuário e retorna um token JWT
+router.post('/users/login',
+    loginValidationRules(),
+    validateData,
+    requestHandler(200, login)
 );
 
 export default router;
