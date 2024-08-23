@@ -13,7 +13,7 @@ const Transaction = sequelize.define(
             autoIncrement: true,
         },
         type: {
-            type: DataTypes.ENUM('income', 'expense'),
+            type: DataTypes.STRING,
             allowNull: false,
         },
         amount: {
