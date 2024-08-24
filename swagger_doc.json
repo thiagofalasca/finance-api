@@ -11,48 +11,73 @@
     "http"
   ],
   "paths": {
-    "/categories": {
+    "/api/categories/": {
       "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Retorna uma lista com paginação de todas as categorias do usuário autenticado, podendo filtrar por ID e nome.",
         "description": "",
         "parameters": [
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "in": "query",
             "type": "string"
           },
           {
             "name": "user_id",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Pagina da lista.",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limite da lista.",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id da categoria.",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Nome da categoria.",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
+          "200": {
+            "description": "Categoria(s) encontrada(s)."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Nenhuma categoria encontrada."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       },
       "post": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Cria uma nova categoria para o usuário autenticado.",
         "description": "",
         "parameters": [
           {
@@ -61,7 +86,7 @@
             "type": "string"
           },
           {
-            "name": "body",
+            "name": "name",
             "in": "body",
             "schema": {
               "type": "object",
@@ -73,25 +98,44 @@
                   "example": "any"
                 }
               }
-            }
+            },
+            "description": "Nome da categoria.",
+            "required": true
           }
         ],
         "responses": {
+          "200": {
+            "description": "Categoria criada."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Nenhuma categoria encontrada."
+          },
+          "409": {
+            "description": "Nome já esta em uso."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       }
     },
-    "/categories/{id}": {
+    "/api/categories/{id}": {
       "put": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Atualiza o nome de uma categoria específica do usuário autenticado.",
         "description": "",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
+            "in": "param",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "ID da categoria."
           },
           {
             "name": "authorization",
@@ -99,7 +143,7 @@
             "type": "string"
           },
           {
-            "name": "body",
+            "name": "name",
             "in": "body",
             "schema": {
               "type": "object",
@@ -108,23 +152,42 @@
                   "example": "any"
                 }
               }
-            }
+            },
+            "description": "Nome da categoria.",
+            "required": false
           }
         ],
         "responses": {
+          "200": {
+            "description": "Nenhum dado alterado."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Categoria não encontrada."
+          },
+          "409": {
+            "description": "Nome já esta em uso."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       },
       "delete": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Deleta uma categoria específica do usuário autenticado.",
         "description": "",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
+            "in": "param",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "ID da categoria."
           },
           {
             "name": "authorization",
@@ -133,53 +196,91 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "Categoria deletada com sucesso!"
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Categoria não encontrada."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       }
     },
-    "/admins/categories": {
+    "/api/admins/categories": {
       "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Retorna uma lista com paginação de todas as categorias de todos os usuários, podendo filtrar por ID e nome.",
         "description": "",
         "parameters": [
           {
             "name": "page",
             "in": "query",
-            "type": "string"
+            "description": "Pagina da lista.",
+            "required": false,
+            "type": "number"
           },
           {
             "name": "limit",
             "in": "query",
-            "type": "string"
+            "description": "Limite da lista.",
+            "required": false,
+            "type": "number"
           },
           {
             "name": "id",
             "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "type": "string"
+            "description": "Id da categoria.",
+            "required": false,
+            "type": "number"
           },
           {
             "name": "user_id",
             "in": "query",
+            "description": "Id do usuário.",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Nome da categoria.",
+            "required": false,
             "type": "string"
           }
         ],
         "responses": {
+          "200": {
+            "description": "Categoria(s) encontrada(s)."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Nenhuma categoria encontrada."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
-      },
+      }
+    },
+    "/api/admins/categories/": {
       "post": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Cria uma nova categoria para um usuário específico..",
         "description": "",
         "parameters": [
           {
-            "name": "body",
+            "name": "user_id",
             "in": "body",
             "schema": {
               "type": "object",
@@ -191,28 +292,57 @@
                   "example": "any"
                 }
               }
+            },
+            "description": "ID do usuário.",
+            "required": true
+          },
+          {
+            "name": "name",
+            "in": "body",
+            "description": "Nome da categoria.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
             }
           }
         ],
         "responses": {
+          "200": {
+            "description": "Categoria criada."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Nenhuma categoria encontrada."
+          },
+          "409": {
+            "description": "Nome já esta em uso."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       }
     },
-    "/admins/categories/{id}": {
+    "/api/admins/categories/{id}": {
       "put": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Atualiza o nome de uma categoria de qualquer usuário.",
         "description": "",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
+            "in": "param",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "ID da categoria."
           },
           {
-            "name": "body",
+            "name": "name",
             "in": "body",
             "schema": {
               "type": "object",
@@ -221,34 +351,66 @@
                   "example": "any"
                 }
               }
-            }
+            },
+            "description": "Nome da categoria.",
+            "required": false
           }
         ],
         "responses": {
+          "200": {
+            "description": "Nenhum dado alterado."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Categoria não encontrada."
+          },
+          "409": {
+            "description": "Nome já esta em uso."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       },
       "delete": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Deleta uma categoria específica do qualquer usuário.",
         "description": "",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
+            "in": "param",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "ID da categoria."
           }
         ],
         "responses": {
+          "200": {
+            "description": "Categoria deletada com sucesso!"
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Categoria não encontrada."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       }
     },
-    "/transactions": {
+    "/api/transactions/": {
       "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Retorna uma lista com paginação de todas as transações do usuário autenticado, podendo filtrar por ID, type, date, description e category_name.",
         "description": "",
         "parameters": [
           {
@@ -257,52 +419,77 @@
             "type": "string"
           },
           {
-            "name": "page",
+            "name": "user_id",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Pagina da lista.",
+            "required": false,
+            "type": "number"
           },
           {
             "name": "limit",
             "in": "query",
-            "type": "string"
+            "description": "Limite da lista.",
+            "required": false,
+            "type": "number"
           },
           {
             "name": "id",
             "in": "query",
-            "type": "string"
+            "description": "Id da transação.",
+            "required": false,
+            "type": "number"
           },
           {
             "name": "type",
             "in": "query",
+            "description": "Tipo da transação.",
+            "required": false,
             "type": "string"
           },
           {
             "name": "date",
             "in": "query",
-            "type": "string"
+            "description": "Data da transação.",
+            "required": false,
+            "type": "Date"
           },
           {
             "name": "description",
             "in": "query",
+            "description": "Descrição da transação.",
+            "required": false,
             "type": "string"
           },
           {
             "name": "category_name",
             "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "user_id",
-            "in": "query",
+            "description": "Nome da categoria da transação.",
+            "required": false,
             "type": "string"
           }
         ],
         "responses": {
+          "200": {
+            "description": "Transação(ões) encontrada(s)."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Nenhuma transação encontrada."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
-      },
+      }
+    },
+    "/transactions": {
       "post": {
         "description": "",
         "parameters": [
@@ -814,12 +1001,19 @@
         }
       }
     },
-    "/": {
+    "/api/install/": {
       "get": {
+        "tags": [
+          "Install"
+        ],
+        "summary": "Preenche o banco de dados co informações de teste.",
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Banco de dados inicializado com sucesso!"
+          },
+          "500": {
+            "description": "Erro ao inicializar o banco de dados."
           }
         }
       }

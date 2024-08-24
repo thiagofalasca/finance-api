@@ -101,7 +101,7 @@ const deleteCategory = async (req, is_admin = false) => {
     // Deleta a categoria
     await category.destroy();
     // Retorna uma mensagem de sucesso
-    return { message: 'Categoria deletada com sucesso.' };
+    return { message: 'Categoria deletada com sucesso!' };
 };
 
 export { listCategories, create, update, deleteCategory, findCategoryByName, findAllCategoriesByName };

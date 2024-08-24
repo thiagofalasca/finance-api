@@ -8,41 +8,115 @@ import { listCategoriesValidationRules, updateCategoryValidationRules } from '..
 const router = express.Router();
 
 // Rotas para usuários comuns:
-
-// Listar Categorias
-// Rota: GET /categories
-// Descrição: Retorna uma lista de todas as categorias do usuário autenticado, podendo filtrar pelo nome.
 router.get('/categories',
+    /*
+    #swagger.path = '/api/categories/'
+    #swagger.tags = ['Categories']
+    #swagger.summary = 'Retorna uma lista com paginação de todas as categorias do usuário autenticado, podendo filtrar por ID e nome.'
+    #swagger.parameters['page'] = {
+        in: 'query',                            
+        description: 'Pagina da lista.',                   
+        required: 'false',                     
+        type: 'number',      
+    }
+    #swagger.parameters['limit'] = {
+        in: 'query',                            
+        description: 'Limite da lista.',                   
+        required: 'false',                     
+        type: 'number',      
+    }
+    #swagger.parameters['id'] = {
+        in: 'query',                            
+        description: 'Id da categoria.',                   
+        required: 'false',                     
+        type: 'number',      
+    }
+    #swagger.parameters['name'] = {
+        in: 'query',                            
+        description: 'Nome da categoria.',                   
+        required: 'false',                     
+        type: 'string',      
+    }
+    #swagger.responses[200] = { description: 'Categoria(s) encontrada(s).' }
+    #swagger.responses[400] = { description: 'Dados de entrada inválidos.' }
+    #swagger.responses[404] = { description: 'Nenhuma categoria encontrada.' }
+    #swagger.responses[500] = { description: 'Erro no servidor.' }
+    */
     verifyToken,
     listCategoriesValidationRules(),
     validateData,
     requestHandler(200, listCategories)
 );
 
-// Criar Categoria
-// Rota: POST /categories
-// Descrição: Cria uma nova categoria para o usuário autenticado.
 router.post('/categories',
+    /*
+    #swagger.path = '/api/categories/'
+    #swagger.tags = ['Categories']
+    #swagger.summary = 'Cria uma nova categoria para o usuário autenticado.'
+    #swagger.parameters['name'] = {
+        in: 'body',                            
+        description: 'Nome da categoria.',                   
+        required: 'true',                     
+        type: 'string',      
+    }
+    #swagger.responses[200] = { description: 'Categoria criada.' }
+    #swagger.responses[400] = { description: 'Dados de entrada inválidos.' }
+    #swagger.responses[404] = { description: 'Nenhuma categoria encontrada.' }
+    #swagger.responses[409] = { description: 'Nome já esta em uso.' }
+    #swagger.responses[500] = { description: 'Erro no servidor.' }
+    */
     verifyToken,
     nameValidationRules(),
     validateData,
     requestHandler(201, create),
 );
 
-// Atualizar Categoria
-// Rota: PUT /categories/:id
-// Descrição: Atualiza o nome de uma categoria específica do usuário autenticado.
 router.put('/categories/:id',
+    /*
+    #swagger.path = '/api/categories/{id}'
+    #swagger.tags = ['Categories']
+    #swagger.summary = 'Atualiza o nome de uma categoria específica do usuário autenticado.'
+    #swagger.parameters['id'] = {
+        in: 'param',                            
+        description: 'ID da categoria.',                   
+        required: 'true',                     
+        type: 'integer',      
+    }
+    #swagger.parameters['name'] = {
+        in: 'body',                            
+        description: 'Nome da categoria.',                   
+        required: 'false',                     
+        type: 'string',      
+    }
+    #swagger.responses[200] = { description: 'Dados atualizados com sucesso!' }
+    #swagger.responses[200] = { description: 'Nenhum dado alterado.' }
+    #swagger.responses[400] = { description: 'Dados de entrada inválidos.' }
+    #swagger.responses[404] = { description: 'Categoria não encontrada.' }
+    #swagger.responses[409] = { description: 'Nome já esta em uso.' }
+    #swagger.responses[500] = { description: 'Erro no servidor.' }
+    */
     verifyToken,
     updateCategoryValidationRules(),
     validateData,
     requestHandler(200, update),
 );
 
-// Deletar Categoria
-// Rota: DELETE /categories/:id
-// Descrição: Deleta uma categoria específica do usuário autenticado.
 router.delete('/categories/:id',
+    /*
+    #swagger.path = '/api/categories/{id}'
+    #swagger.tags = ['Categories']
+    #swagger.summary = 'Deleta uma categoria específica do usuário autenticado.'
+    #swagger.parameters['id'] = {
+        in: 'param',                            
+        description: 'ID da categoria.',                   
+        required: 'true',                     
+        type: 'integer',      
+    }
+    #swagger.responses[200] = { description: 'Categoria deletada com sucesso!' }
+    #swagger.responses[400] = { description: 'Dados de entrada inválidos.' }
+    #swagger.responses[404] = { description: 'Categoria não encontrada.' }
+    #swagger.responses[500] = { description: 'Erro no servidor.' }
+    */
     verifyToken,
     idValidationRules('param'),
     validateData,
@@ -50,10 +124,46 @@ router.delete('/categories/:id',
 );
 
 // Rotas para administradores:
-// Listar Categorias de Todos os Usuários
-// Rota: GET /admins/categories
-// Descrição: Retorna uma lista de todas as categorias de todos os usuários. (Pode incluir filtros para categorias de usuários específicos.)
 router.get('/admins/categories',
+    /*
+    #swagger.path = '/api/admins/categories'
+    #swagger.tags = ['Categories']
+    #swagger.summary = 'Retorna uma lista com paginação de todas as categorias de todos os usuários, podendo filtrar por ID e nome.'
+    #swagger.parameters['page'] = {
+        in: 'query',                            
+        description: 'Pagina da lista.',                   
+        required: 'false',                     
+        type: 'number',      
+    }
+    #swagger.parameters['limit'] = {
+        in: 'query',                            
+        description: 'Limite da lista.',                   
+        required: 'false',                     
+        type: 'number',      
+    }
+    #swagger.parameters['id'] = {
+        in: 'query',                            
+        description: 'Id da categoria.',                   
+        required: 'false',                     
+        type: 'number',      
+    }
+    #swagger.parameters['user_id'] = {
+        in: 'query',                            
+        description: 'Id do usuário.',                   
+        required: 'false',                     
+        type: 'number',      
+    }
+    #swagger.parameters['name'] = {
+        in: 'query',                            
+        description: 'Nome da categoria.',                   
+        required: 'false',                     
+        type: 'string',      
+    }
+    #swagger.responses[200] = { description: 'Categoria(s) encontrada(s).' }
+    #swagger.responses[400] = { description: 'Dados de entrada inválidos.' }
+    #swagger.responses[404] = { description: 'Nenhuma categoria encontrada.' }
+    #swagger.responses[500] = { description: 'Erro no servidor.' }
+    */
     verifyAdmin,
     listCategoriesValidationRules(),
     idValidationRules('query', true, 'user_id'),
@@ -61,10 +171,29 @@ router.get('/admins/categories',
     requestHandler(200, (req) => listCategories(req, true)),
 );
 
-// Criar Categoria para Qualquer Usuário
-// Rota: POST /admins/categories
-// Descrição: Cria uma nova categoria para um usuário específico. (Pode incluir um parâmetro para indicar o usuário.)
 router.post('/admins/categories',
+    /*
+    #swagger.path = '/api/admins/categories/'
+    #swagger.tags = ['Categories']
+    #swagger.summary = 'Cria uma nova categoria para um usuário específico..'
+    #swagger.parameters['user_id'] = {
+        in: 'body',                            
+        description: 'ID do usuário.',                   
+        required: 'true',                     
+        type: 'string',      
+    }
+    #swagger.parameters['name'] = {
+        in: 'body',                            
+        description: 'Nome da categoria.',                   
+        required: 'true',                     
+        type: 'string',      
+    }
+    #swagger.responses[200] = { description: 'Categoria criada.' }
+    #swagger.responses[400] = { description: 'Dados de entrada inválidos.' }
+    #swagger.responses[404] = { description: 'Nenhuma categoria encontrada.' }
+    #swagger.responses[409] = { description: 'Nome já esta em uso.' }
+    #swagger.responses[500] = { description: 'Erro no servidor.' }
+    */
     verifyAdmin,
     nameValidationRules(),
     idValidationRules('body', false, 'user_id'),
@@ -72,20 +201,52 @@ router.post('/admins/categories',
     requestHandler(201, (req) => create(req, true)),
 );
 
-// Atualizar Categoria de Qualquer Usuário
-// Rota: PUT /admins/categories/:id
-// Descrição: Atualiza os detalhes de uma categoria de qualquer usuário.
 router.put('/admins/categories/:id',
+    /*
+    #swagger.path = '/api/admins/categories/{id}'
+    #swagger.tags = ['Categories']
+    #swagger.summary = 'Atualiza o nome de uma categoria de qualquer usuário.'
+    #swagger.parameters['id'] = {
+        in: 'param',                            
+        description: 'ID da categoria.',                   
+        required: 'true',                     
+        type: 'integer',      
+    }
+    #swagger.parameters['name'] = {
+        in: 'body',                            
+        description: 'Nome da categoria.',                   
+        required: 'false',                     
+        type: 'string',      
+    }
+    #swagger.responses[200] = { description: 'Dados atualizados com sucesso!' }
+    #swagger.responses[200] = { description: 'Nenhum dado alterado.' }
+    #swagger.responses[400] = { description: 'Dados de entrada inválidos.' }
+    #swagger.responses[404] = { description: 'Categoria não encontrada.' }
+    #swagger.responses[409] = { description: 'Nome já esta em uso.' }
+    #swagger.responses[500] = { description: 'Erro no servidor.' }
+    */
     verifyAdmin,
     updateCategoryValidationRules(),
     validateData,
     requestHandler(200, (req) => update(req, true)),
 );
 
-// Deletar Categoria de Qualquer Usuário
-// Rota: DELETE /admins/categories/:id
-// Descrição: Deleta uma categoria de qualquer usuário.
 router.delete('/admins/categories/:id',
+    /*
+    #swagger.path = '/api/admins/categories/{id}'
+    #swagger.tags = ['Categories']
+    #swagger.summary = 'Deleta uma categoria específica do qualquer usuário.'
+    #swagger.parameters['id'] = {
+        in: 'param',                            
+        description: 'ID da categoria.',                   
+        required: 'true',                     
+        type: 'integer',      
+    }
+    #swagger.responses[200] = { description: 'Categoria deletada com sucesso!' }
+    #swagger.responses[400] = { description: 'Dados de entrada inválidos.' }
+    #swagger.responses[404] = { description: 'Categoria não encontrada.' }
+    #swagger.responses[500] = { description: 'Erro no servidor.' }
+    */
     verifyAdmin,
     idValidationRules('param'),
     validateData,

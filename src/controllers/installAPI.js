@@ -8,6 +8,13 @@ import sequelize from '../config/database.js';
 const router = express.Router();
 
 router.get('/install', async (req, res) => {
+    /*
+    #swagger.path = '/api/install/'
+    #swagger.tags = ['Install']
+    #swagger.summary = 'Preenche o banco de dados co informações de teste.'
+    #swagger.responses[200] = { description: 'Banco de dados inicializado com sucesso!' }
+    #swagger.responses[500] = { description: 'Erro ao inicializar o banco de dados.' }
+    */
     try {
         await sequelize.sync({ force: true })
         // Cria um usuário administrador

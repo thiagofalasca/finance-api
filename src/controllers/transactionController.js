@@ -8,11 +8,59 @@ import { listTransactionValidationRules, transactionValidationRules, updateTrans
 const router = express.Router();
 
 // Rotas Para Usuários Comuns:
-
-// Listar Transações
-// Rota: GET /transactions
 // Descrição: Retorna uma lista de todas as transações do usuário autenticado, com opções de filtro e paginação.
 router.get('/transactions',
+    /*
+    #swagger.path = '/api/transactions/'
+    #swagger.tags = ['Categories']
+    #swagger.summary = 'Retorna uma lista com paginação de todas as transações do usuário autenticado, podendo filtrar por ID, type, date, description e category_name.'
+    #swagger.parameters['page'] = {
+        in: 'query',                            
+        description: 'Pagina da lista.',                   
+        required: 'false',                     
+        type: 'number',      
+    }
+    #swagger.parameters['limit'] = {
+        in: 'query',                            
+        description: 'Limite da lista.',                   
+        required: 'false',                     
+        type: 'number',      
+    }
+    #swagger.parameters['id'] = {
+        in: 'query',                            
+        description: 'Id da transação.',                   
+        required: 'false',                     
+        type: 'number',      
+    }
+    #swagger.parameters['type'] = {
+        in: 'query',                            
+        description: 'Tipo da transação.',                   
+        required: 'false',                     
+        type: 'string',      
+    }
+    #swagger.parameters['date'] = {
+        in: 'query',                            
+        description: 'Data da transação.',                   
+        required: 'false',                     
+        type: 'Date',      
+    }
+    #swagger.parameters['description'] = {
+        in: 'query',                            
+        description: 'Descrição da transação.',                   
+        required: 'false',                     
+        type: 'string',      
+    }
+    #swagger.parameters['category_name'] = {
+        in: 'query',                            
+        description: 'Nome da categoria da transação.',                   
+        required: 'false',                     
+        type: 'string',      
+    }
+    #swagger.responses[200] = { description: 'Transação(ões) encontrada(s).' }
+    #swagger.responses[400] = { description: 'Dados de entrada inválidos.' }
+    #swagger.responses[404] = { description: 'Nenhuma transação encontrada.' }
+    #swagger.responses[500] = { description: 'Erro no servidor.' }
+    */
     verifyToken,
     listTransactionValidationRules(),
     validateData,

@@ -11,7 +11,10 @@ const listCategoriesValidationRules = () => {
 
 // Regras de validação para update de categorias
 const updateCategoryValidationRules = () => {
-    return [idValidationRules('param'), nameValidationRules()];
+    return [
+        idValidationRules('param'),
+        nameValidationRules()
+    ];
 };
 
 export { listCategoriesValidationRules, updateCategoryValidationRules };
