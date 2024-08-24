@@ -69,9 +69,10 @@ const create = async (req, is_admin = false) => {
     const user_id = is_admin ? req.body.user_id : req.userId;
     const { type, amount, date, description, category_name } = req.body;
     // Verifica se o usuário existe
-    await findUserById(user_id);
+    const user = await findUserById(user_id);
     // Verifica se a categoria existe
     const category = await checkCategory(category_name, user_id);
+    await updateNumTransactions(user, 1)
     // Cria uma nova transação e retorna o objeto criado
     return await Transaction.create({
         type,
@@ -117,10 +118,12 @@ const update = async (req, is_admin = false) => {
 // Função para deletar uma transação
 const deleteTransaction = async (req, is_admin = false) => {
     const transaction_id = req.params.id;
+    const user = await findUserById(req.userId);
     // Busca a transação pelo ID
     const transaction = await findTransactionById(transaction_id, req.userId, is_admin);
     // Deleta a transação
     await transaction.destroy();
+    await updateNumTransactions(user, -1)
     // Retorna uma mensagem de sucesso
     return { message: 'Transação deletada com sucesso.' };
 };
@@ -150,7 +153,7 @@ const generateReport = async (req) => {
         }
     });
     const balance = totalIncome - totalExpense;
-    return { totalIncome, totalExpense, balance };
+    return { message: "Relatório gerado com sucesso!", totalIncome, totalExpense, balance };
 };
 
 export { listTransactions, create, update, deleteTransaction, generateReport };

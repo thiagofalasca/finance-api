@@ -190,7 +190,7 @@ router.post('/admins/categories',
     }
     #swagger.responses[200] = { description: 'Categoria criada.' }
     #swagger.responses[400] = { description: 'Dados de entrada inválidos.' }
-    #swagger.responses[404] = { description: 'Nenhuma categoria encontrada.' }
+    #swagger.responses[404] = { description: 'Usuário não encontrado.' }
     #swagger.responses[409] = { description: 'Nome já esta em uso.' }
     #swagger.responses[500] = { description: 'Erro no servidor.' }
     */

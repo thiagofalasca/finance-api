@@ -315,7 +315,7 @@
             "description": "Dados de entrada inválidos."
           },
           "404": {
-            "description": "Nenhuma categoria encontrada."
+            "description": "Usuário não encontrado."
           },
           "409": {
             "description": "Nome já esta em uso."
@@ -408,21 +408,11 @@
     "/api/transactions/": {
       "get": {
         "tags": [
-          "Categories"
+          "Transactions"
         ],
-        "summary": "Retorna uma lista com paginação de todas as transações do usuário autenticado, podendo filtrar por ID, type, date, description e category_name.",
+        "summary": "Retorna uma lista com paginação de todas as transações de todos os usuários, podendo filtrar por ID, type, date, description e category_name.",
         "description": "",
         "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "type": "string"
-          },
           {
             "name": "page",
             "in": "query",
@@ -471,6 +461,13 @@
             "description": "Nome da categoria da transação.",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "Id do usuário da transação.",
+            "required": false,
+            "type": "number"
           }
         ],
         "responses": {
@@ -487,19 +484,16 @@
             "description": "Erro no servidor."
           }
         }
-      }
-    },
-    "/transactions": {
+      },
       "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Cria uma nova transação para qualquer usuário , associada a uma categoria.",
         "description": "",
         "parameters": [
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
+            "name": "type",
             "in": "body",
             "schema": {
               "type": "object",
@@ -523,33 +517,74 @@
                   "example": "any"
                 }
               }
+            },
+            "description": "Tipo da transação.",
+            "required": true
+          },
+          {
+            "name": "amount",
+            "in": "body",
+            "description": "Data da transação.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "date",
+            "in": "body",
+            "description": "Data da transação.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "description",
+            "in": "body",
+            "description": "Descrição da transação.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
             }
           }
         ],
         "responses": {
+          "200": {
+            "description": "Transação criada."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Usuário não encontrado."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       }
     },
-    "/transactions/{id}": {
+    "/api/transactions/{id}": {
       "put": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Atualiza os dados da transação de qualquer usuário.",
         "description": "",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
+            "in": "param",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "ID da transação."
           },
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
+            "name": "type",
             "in": "body",
             "schema": {
               "type": "object",
@@ -570,39 +605,93 @@
                   "example": "any"
                 }
               }
+            },
+            "description": "Tipo da transação.",
+            "required": false
+          },
+          {
+            "name": "amount",
+            "in": "body",
+            "description": "Data da transação.",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "date",
+            "in": "body",
+            "description": "Data da transação.",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "description",
+            "in": "body",
+            "description": "Descrição da transação.",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {}
             }
           }
         ],
         "responses": {
+          "200": {
+            "description": "Nenhum dado alterado."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Usuário não encontrada."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       },
       "delete": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Deleta a transação de qualquer usuário.",
         "description": "",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
+            "in": "param",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
+            "type": "integer",
+            "description": "ID da transação."
           }
         ],
         "responses": {
+          "200": {
+            "description": "Transação deletada com sucesso!"
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Usuário não encontrada."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       }
     },
-    "/transactions/report": {
+    "/api/transactions/report": {
       "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Gera um relatório mensal com total de receitas, despesas e saldo final.",
         "description": "",
         "parameters": [
           {
@@ -613,211 +702,101 @@
           {
             "name": "month",
             "in": "query",
-            "type": "string"
+            "description": "Mês do relatório.",
+            "required": true,
+            "type": "number"
           },
           {
             "name": "year",
             "in": "query",
-            "type": "string"
+            "description": "Ano do relatório.",
+            "required": true,
+            "type": "number"
           }
         ],
         "responses": {
+          "200": {
+            "description": "Relatório gerado com sucesso!"
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       }
     },
-    "/admins/transactions": {
+    "/api/users/": {
       "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Retorna uma lista com paginação de todos os usuários, podendo filtrar por ID, nome e email.",
         "description": "",
         "parameters": [
           {
             "name": "page",
             "in": "query",
-            "type": "string"
+            "description": "Pagina da lista.",
+            "required": false,
+            "type": "number"
           },
           {
             "name": "limit",
             "in": "query",
-            "type": "string"
+            "description": "Limite da lista.",
+            "required": false,
+            "type": "number"
           },
           {
             "name": "id",
             "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "type",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "date",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "category_name",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "user_id": {
-                  "example": "any"
-                },
-                "type": {
-                  "example": "any"
-                },
-                "amount": {
-                  "example": "any"
-                },
-                "date": {
-                  "example": "any"
-                },
-                "description": {
-                  "example": "any"
-                },
-                "category_name": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/admins/transactions/{id}": {
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "example": "any"
-                },
-                "amount": {
-                  "example": "any"
-                },
-                "date": {
-                  "example": "any"
-                },
-                "description": {
-                  "example": "any"
-                },
-                "category_name": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/users": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "in": "query",
-            "type": "string"
+            "description": "Id do usuário.",
+            "required": false,
+            "type": "number"
           },
           {
             "name": "name",
             "in": "query",
+            "description": "Nome do usuário.",
+            "required": false,
             "type": "string"
           },
           {
             "name": "email",
             "in": "query",
+            "description": "Email do usuário.",
+            "required": false,
             "type": "string"
           }
         ],
         "responses": {
+          "200": {
+            "description": "Usuário encontrado!"
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Nenhum usuário encontrado."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       }
     },
-    "/admins/users/register": {
+    "/api/admins/users/register": {
       "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Cria um novo usuário com privilégios de administrador.",
         "description": "",
         "parameters": [
           {
-            "name": "body",
+            "name": "name",
             "in": "body",
             "schema": {
               "type": "object",
@@ -832,28 +811,67 @@
                   "example": "any"
                 }
               }
+            },
+            "description": "Nome do usuário.",
+            "required": true
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Email do usuário.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Senha do usuário.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
             }
           }
         ],
         "responses": {
+          "200": {
+            "description": "Usuário criado."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Nenhuma categoria encontrada."
+          },
+          "409": {
+            "description": "E-mail já esta em uso."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       }
     },
-    "/admins/users/{id}": {
+    "/api/admins/users/{id}": {
       "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Atualiza os dados de um usuário qualquer.",
         "description": "",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
+            "in": "param",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "ID do usuário."
           },
           {
-            "name": "body",
+            "name": "name",
             "in": "body",
             "schema": {
               "type": "object",
@@ -868,38 +886,90 @@
                   "example": "any"
                 }
               }
+            },
+            "description": "Nome do usuário.",
+            "required": false
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Email do usuário.",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Senha do usuário.",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {}
             }
           }
         ],
         "responses": {
+          "200": {
+            "description": "Nenhum dado alterado."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Usuário não encontrada."
+          },
+          "409": {
+            "description": "E-mail já esta em uso."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       },
       "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Deleta um usuário qualquer.",
         "description": "",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
+            "in": "param",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "ID do usuário."
           }
         ],
         "responses": {
+          "200": {
+            "description": "Usuário deletada com sucesso!"
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Usuário não encontrada."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       }
     },
-    "/users/register": {
+    "/api/users/register": {
       "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Cria um novo usuário.",
         "description": "",
         "parameters": [
           {
-            "name": "body",
+            "name": "name",
             "in": "body",
             "schema": {
               "type": "object",
@@ -914,18 +984,56 @@
                   "example": "any"
                 }
               }
+            },
+            "description": "Nome do usuário.",
+            "required": true
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Email do usuário.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Senha do usuário.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
             }
           }
         ],
         "responses": {
+          "200": {
+            "description": "Usuário criado."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Nenhuma categoria encontrada."
+          },
+          "409": {
+            "description": "E-mail já esta em uso."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       }
     },
-    "/users/me": {
+    "/api/users/me": {
       "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Retorna uma lista com os dados do usuário autenticado.",
         "description": "",
         "parameters": [
           {
@@ -935,12 +1043,22 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "Usuário encontrado!"
+          },
+          "404": {
+            "description": "Usuário não encontrado."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       },
       "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Atualiza os dados do usuário autenticado.",
         "description": "",
         "parameters": [
           {
@@ -949,7 +1067,7 @@
             "type": "string"
           },
           {
-            "name": "body",
+            "name": "name",
             "in": "body",
             "schema": {
               "type": "object",
@@ -964,22 +1082,60 @@
                   "example": "any"
                 }
               }
+            },
+            "description": "Nome do usuário.",
+            "required": false
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Email do usuário.",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Senha do usuário.",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {}
             }
           }
         ],
         "responses": {
+          "200": {
+            "description": "Nenhum dado alterado."
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Usuário não encontrada."
+          },
+          "409": {
+            "description": "E-mail já esta em uso."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       }
     },
-    "/users/login": {
+    "/api/users/login": {
       "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Autentica um usuário e retorna um token JWT.",
         "description": "",
         "parameters": [
           {
-            "name": "body",
+            "name": "email",
             "in": "body",
             "schema": {
               "type": "object",
@@ -991,12 +1147,33 @@
                   "example": "any"
                 }
               }
+            },
+            "description": "Email do usuário.",
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Senha do usuário.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
             }
           }
         ],
         "responses": {
+          "200": {
+            "description": "Login realizado com sucesso!"
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Usuário não encontrada."
+          },
+          "500": {
+            "description": "Erro no servidor."
           }
         }
       }

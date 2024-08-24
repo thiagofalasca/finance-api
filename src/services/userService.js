@@ -112,4 +112,12 @@ const login = async (req) => {
     } else throw new UnauthorizedError('Senha incorreta.');
 };
 
-export { findUserById, listUsers, register, update, deleteUser, login };
+// Função para atualizar os dados de um usuário
+const updateNumTransactions = async (user, num) => {
+    let num_novo = parseInt(user.num_transactions) + num
+    // Atualiza o numero de transações do usuário
+    await User.update({ num_transactions: num_novo }, { where: { id: user.id } });
+    return num_novo
+};
+
+export { findUserById, listUsers, register, update, deleteUser, login, updateNumTransactions };
