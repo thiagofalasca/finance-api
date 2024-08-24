@@ -10,7 +10,6 @@ Finance API é uma API back-end desenvolvida em Node.js usando Express, que visa
 - CRUD de usuários, transações e categorias
 - Filtros e paginação nas listagens
 - Geração de relatórios financeiros
-- Alertas automáticos de saldo baixo e metas de gastos
 - Documentação automática com Swagger
 
 ## Tecnologias Utilizadas
@@ -80,15 +79,6 @@ Antes de começar, certifique-se de ter o Node.js e o PostgreSQL instalados em s
     O servidor estará disponível em http://localhost:3000.
 
 ## Uso
-
-### Rotas Principais
-
-- **POST /api/users/register**: Cadastra um novo usuário.
-- **POST /api/users/login**: Autentica o usuário e gera um token JWT.
-- **POST /api/transactions**: Cria uma nova transação.
-- **GET /api/transactions**: Lista todas as transações do usuário.
-- **PUT /api/transactions/**: Atualiza uma transação existente.
-- **DELETE /api/transactions/**: Exclui uma transação.
 
 ## Documentação
 
