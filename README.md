@@ -1,93 +1,93 @@
 # Finance API
 
-## Descrição
+## Description
 
-Finance API é uma API back-end desenvolvida em Node.js usando Express, que visa gerenciar as operações financeiras do usuário. A API permite que os usuários cadastrem, atualizem, excluam e visualizem suas transações, categorizando-as em receitas e despesas, além de gerar relatórios.
+Finance API is a back-end API developed in Node.js using Express, which aims to manage the user's financial operations. The API allows users to register, update, delete and view their transactions, categorizing them into income and expenses, in addition to generating reports.
 
-## Funcionalidades
+## Features
 
-- Sistema de autenticação com JWT (JSON Web Token)
-- CRUD de usuários, transações e categorias
-- Filtros e paginação nas listagens
-- Geração de relatórios financeiros
-- Documentação automática com Swagger
+- Authentication system with JWT (JSON Web Token)
+- CRUD of users, transactions and categories
+- Filters and pagination in listings
+- Generation of financial reports
+- Automatic documentation with Swagger
 
-## Tecnologias Utilizadas
+## Technologies Used
 
-- **Node.js**: Plataforma para execução do código JavaScript no backend.
-- **Express**: Framework para construção de APIs em Node.js.
-- **Sequelize**: ORM para mapeamento objeto-relacional.
-- **PostgreSQL**: Banco de dados relacional.
-- **JWT**: Autenticação baseada em tokens.
-- **ESLint & Prettier**: Ferramentas para linting e formatação de código.
-- **Swagger**: Documentação da API.
-- **bcryptjs**: Biblioteca para hash de senhas.
-- **dotenv**: Gerenciamento de variáveis de ambiente.
-- **express-validator**: Validação de dados em Express.
+- **Node.js**: Platform for executing JavaScript code in the backend.
+- **Express**: Framework for building APIs in Node.js.
+- **Sequelize**: ORM for object-relational mapping.
+- **PostgreSQL**: Relational database.
+- **JWT**: Token-based authentication.
+- **ESLint & Prettier**: Linting and code formatting tools.
+- **Swagger**: API documentation.
+- **bcryptjs**: Password hashing library.
+- **dotenv**: Environment variable management.
+- **express-validator**: Data validation in Express.
 
-## Pré-requisitos
+## Prerequisites
 
-Antes de começar, certifique-se de ter o Node.js e o PostgreSQL instalados em sua máquina.
+Before you start, make sure you have Node.js and PostgreSQL installed on your machine.
 
 - **Node.js**: v14+ (https://nodejs.org/)
 - **PostgreSQL**: v12+ (https://www.postgresql.org/)
 
-## Instalação
+## Installation
 
-1. **Clone o repositório:**
+1. **Clone the repository:**
 
-   ```
-   git clone https://github.com/thiagofalasca/finance-api.git
-   cd finance-api
-   ```
+```
+git clone https://github.com/thiagofalasca/finance-api.git
+cd finance-api
+```
 
-2. **Instale as dependências:**
+2. **Install the dependencies:**
 
-    ```
-    npm install
-    ```
+```
+npm install
+```
 
-3. **Configure as variáveis deambiente:**
+3. **Set the environment variables:**
 
-    Crie um arquivo .env na raiz do projeto com as seguintes variáveis:
+Create a .env file in the project root with the following variables:
 
-    ```
-    DB_DIALECT=postgres
-    DB_HOST=localhost
-    DB_NAME=finance_api
-    DB_USER=seu-usuário
-    DB_PASS=sua-senha
-    DB_PORT=5432
-    JWT_SECRET=sua-chave-secreta
-    PORT=3000
-    ```
+```
+DB_DIALECT=postgres
+DB_HOST=localhost
+DB_NAME=finance_api
+DB_USER=your-username
+DB_PASS=your-password
+DB_PORT=5432
+JWT_SECRET=your-secret-key
+PORT=3000
+```
 
-4. **Configure o banco de dados:**
+4. **Set up the database:**
 
-    Certifique-se de que o PostgreSQL esteja rodando e crie o banco de dados:
+Make sure PostgreSQL is running and create the database:
 
-    ```
-    CREATE DATABASE my_finance;
-    ```
+```
+CREATE DATABASE my_finance;
+```
 
-5. **Inicie o servidor:**
+5. **Start the server:**
 
-    ```
-    npm run dev
-    ```
+```
+npm run dev
+```
 
-    O servidor estará disponível em http://localhost:3000.
+The server will be available at http://localhost:3000.
 
-## Uso
+## Usage
 
-## Documentação
+## Documentation
 
-A documentação completa da API pode ser acessada via Swagger em:
+The full API documentation can be accessed via Swagger at:
 
-    ```
-    GET /api/docs
-    ```
+```
+GET /api/docs
+```
 
-## Testes
+## Testing
 
-Testes das funcionalidades podem ser realizados utilizando o Thunder Client ou Postman.
+Functionality tests can be performed using Thunder Client or Postman.
